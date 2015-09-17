@@ -79,10 +79,28 @@ while(1) {
 		print("That sequence does not exist!\n");
 		next;
 	}
+		  
+	# Get the current sequence
+	my $seq = $sequences[$chosenSeq - 1];
 	
+	# Figure out the number of lines to print
+	my $lineNum = int(length($seq) / 100);
+	
+	# Check if there needs to be an extra line
+	if( length($seq) % 100 != 0) {
+		$lineNum++;
+	}
+	# Get the number of digits
+	my $digits = length("".$lineNum);
+	my $linePad = "";
+	for(my $l = 0; $l < $digits; $l++) {
+		$linePad .= " ";	
+	}
+
+
 	# Begin printing the sequence
-	print("     ".
-	      "          1".$space.
+	print("     ".$linePad.
+	      "         1".$space.
 		  "         2".$space.
 		  "         3".$space.
 		  "         4".$space.
@@ -93,7 +111,7 @@ while(1) {
 		  "         9".$space.
 		  "        10\n");
 		  
-	print("Line  ".
+	print("Line".$linePad." ".
 		  "1234567890".$space.
 		  "1234567890".$space.
 		  "1234567890".$space.
@@ -104,24 +122,15 @@ while(1) {
 		  "1234567890".$space.
 		  "1234567890".$space.
 		  "1234567890\n");
-		  
-	# Get the current sequence
-	my $seq = $sequences[$chosenSeq - 1];
-	
-	# Figure out the number of lines to print
-	my $lineNum = length($seq) / 100;
-	
-	# Check if there needs to be an extra line
-	if( length($seq) % 100 != 0) {
-		$lineNum++;
-	}
-	my $indent = "   ";
+
+	my $indent = "    ";
 	for(my $i = 1; $i <= $lineNum; $i++) {
-		if($i < 10) {
-			print($indent." "."$i ");
-		} else {
-			print($indent."$i ");
+		my $paddingLen = $digits - length("".$i);
+		my $padding = "";
+		for(my $l = 0; $l < $paddingLen; $l++) {
+			$padding .= " ";	
 		}
+		print($indent.$padding."$i ");
 		
 		# $k starting point is 100 times the current line number - 1. 
 		# The subtraction ensures that $k starts at 0.
