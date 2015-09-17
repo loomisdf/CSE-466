@@ -82,7 +82,7 @@ while(1) {
 	
 	# Begin printing the sequence
 	print("     ".
-	      "         1".$space.
+	      "          1".$space.
 		  "         2".$space.
 		  "         3".$space.
 		  "         4".$space.
@@ -93,7 +93,7 @@ while(1) {
 		  "         9".$space.
 		  "        10\n");
 		  
-	print("Line ".
+	print("Line  ".
 		  "1234567890".$space.
 		  "1234567890".$space.
 		  "1234567890".$space.
@@ -115,8 +115,13 @@ while(1) {
 	if( length($seq) % 100 != 0) {
 		$lineNum++;
 	}
+	my $indent = "   ";
 	for(my $i = 1; $i <= $lineNum; $i++) {
-		print("   $i ");
+		if($i < 10) {
+			print($indent." "."$i ");
+		} else {
+			print($indent."$i ");
+		}
 		
 		# $k starting point is 100 times the current line number - 1. 
 		# The subtraction ensures that $k starts at 0.
