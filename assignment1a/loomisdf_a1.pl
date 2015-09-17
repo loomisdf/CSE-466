@@ -75,7 +75,7 @@ while(1) {
 	}
 	
 	# Make sure the sequence exists
-	if($chosenSeq > $seqCount) {
+	if($chosenSeq > $seqCount || $chosenSeq < 1) {
 		print("That sequence does not exist!\n");
 		next;
 	}
