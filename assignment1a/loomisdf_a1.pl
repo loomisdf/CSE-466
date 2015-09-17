@@ -9,7 +9,7 @@ This perl program is for the first assignment in CSE 466
 =cut
 
 # Read the filename from an argument
-my $fileName = shift;
+my $fileName = $ARGV[0];
 
 # Initilize some global variables
 my @sequences = ("");	# Array to hold each sequence
@@ -178,6 +178,6 @@ sub nucleotideCounting {
 
 # Executed when exit() is called
 sub END {
-	print("Exiting program");
+	print("Exiting program\n");
 }
 
