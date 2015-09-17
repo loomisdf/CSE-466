@@ -90,13 +90,15 @@ while(1) {
 	if( length($seq) % 100 != 0) {
 		$lineNum++;
 	}
+
 	# Get the number of digits
 	my $digits = length("".$lineNum);
+
+	# Figure out padding for line and necleotide position
 	my $linePad = "";
 	for(my $l = 0; $l < $digits; $l++) {
 		$linePad .= " ";	
 	}
-
 
 	# Begin printing the sequence
 	print("     ".$linePad.
@@ -125,6 +127,8 @@ while(1) {
 
 	my $indent = "    ";
 	for(my $i = 1; $i <= $lineNum; $i++) {
+		# Figure out the padding based on the number of
+		# digits - the length of the number of digits of i
 		my $paddingLen = $digits - length("".$i);
 		my $padding = "";
 		for(my $l = 0; $l < $paddingLen; $l++) {
