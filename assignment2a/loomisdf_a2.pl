@@ -1,8 +1,8 @@
 #!usr/bin/perl -w
 use strict;
-#use Venn::Chart;
+use Venn::Chart;
 
-#my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
+my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
 
 # File names
 my $file1 = "";
@@ -164,7 +164,6 @@ sub diff {
 				}
 			}
 			if($isUnique) {
-				print "unique gene = $i\n";
 				push(@unique, $i);
 			}
 		}
