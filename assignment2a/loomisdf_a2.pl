@@ -64,9 +64,9 @@ my @file3_unique = ();
 
 if($has3Files) {
 	# TODO need to change these to diff(diff(A, B), C);
-	@file1_unique = (diff(\%file1_hash, \%file2_hash), diff(\%file1_hash, \%file3_hash));
-	@file2_unique = (diff(\%file2_hash, \%file1_hash), diff(\%file2_hash, \%file3_hash));
-	@file3_unique = (diff(\%file3_hash, \%file1_hash), diff(\%file3_hash, \%file2_hash));
+	@file1_unique = diff(\%file1_hash, \%file2_hash, \%file3_hash);
+	@file2_unique = diff(\%file2_hash, \%file1_hash, \%file3_hash);
+	@file3_unique = diff(\%file3_hash, \%file1_hash, \%file2_hash);
 } else {
 	@file1_unique = diff(\%file1_hash, \%file2_hash); # file1 - file2
 	@file2_unique = diff(\%file2_hash, \%file1_hash); # file2 - file1
@@ -114,10 +114,17 @@ if($has3Files) {
 # FUNCTIONS
 ###########
 
-# Takes the difference between two hashes and returns it as an array
+# Takes the difference between two or three hashes and returns it as an array
 sub diff {
-	my ($href1, $href2) = @_;
+	my ($href1, $href2, $href3) = @_;
 	#my %hash = map{$_ => 1} @$href1;
+	if(defined($href3)) {
+		#TODO this code is very close
+		my @list1 = keys($href1);
+		my @list2 = (keys($href2), keys($href3));
+		my @dif { @list2 } = ();
+		return grep( !exists($dif{$_}), @list1);
+	}
 	return grep(!defined %$href2->{$_}, keys($href1)); # href1 - href2
 }
 
