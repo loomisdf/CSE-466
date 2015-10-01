@@ -1,8 +1,8 @@
 #!usr/bin/perl -w
 use strict;
-use Venn::Chart;
+#use Venn::Chart;
 
-my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
+#my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
 
 # File names
 my $file1 = "";
@@ -72,42 +72,69 @@ if($has3Files) {
 	@file2_unique = diff(\%file2_hash, \%file1_hash); # file2 - file1
 }
 
-# The Intersection of the 3 files
-my @intersect = ();
-if($has3Files) {
-	@intersect = intersect(\%file1_hash, \%file2_hash, \%file3_hash);
-} else {
-	@intersect = intersect(\%file1_hash, \%file2_hash);
-}
-
 # MAIN OUTPUT
 #############
+my @intersect = ();
+
 if($has3Files) {
+	@intersect = intersect(\%file1_hash, \%file2_hash, \%file3_hash);
 	print "[1] Common gene set for 3 files: $file1, $file2, and $file3\n";
 	foreach my $key (sort(@intersect)) {
 		print "$key $file1=$file1_hash{$key} $file2=$file2_hash{$key} $file3=$file3_hash{$key}\n";
 	}
+
+	@intersect = ();
+	@intersect = intersect(\%file1_hash, \%file2_hash);
+	print "[2] Common gene set for 2 files: $file1 and $file2\n";
+	foreach my $key (sort(@intersect)) {
+		print "$key $file1=$file1_hash{$key} $file2=$file2_hash{$key}\n";
+	}
+
+	@intersect = ();
+	@intersect = intersect(\%file1_hash, \%file3_hash);
+	print "[3] Common gene set for 2 files: $file1 and $file3\n";
+	foreach my $key (sort(@intersect)) {
+		print "$key $file1=$file1_hash{$key} $file3=$file3_hash{$key}\n";
+	}
+
+	@intersect = ();
+	@intersect = intersect(\%file2_hash, \%file3_hash);
+	print "[4] Common gene set for 2 files: $file2 and $file3\n";
+	foreach my $key (sort(@intersect)) {
+		print "$key $file2=$file2_hash{$key} $file3=$file3_hash{$key}\n";
+	}
+
+	#print out the unique values
+	print "[5] Gene Set unique for 1 file: $file1\n";
+	foreach my $key (sort(@file1_unique)) {
+		print "$key=$file1_hash{$key}\n";
+	}
+
+	print "[6] Gene Set unique for 1 file: $file2\n";
+	foreach my $key (sort(@file2_unique)) {
+		print "$key=$file2_hash{$key}\n";
+	}
+
+	print "[7] Gene Set unique for 1 file: $file3\n";
+	foreach my $key (sort(@file3_unique)) {
+		print "$key=$file3_hash{$key}\n";
+	}
 } else {
+	@intersect = ();
+	@intersect = intersect(\%file1_hash, \%file2_hash);
 	print "[1] Common gene set for 2 files: $file1 and $file2\n";
 	foreach my $key (sort(@intersect)) {
 		print "$key $file1=$file1_hash{$key} $file2=$file2_hash{$key}\n";
 	}
-}
 
-print "[2] Gene Set unique for 1 file: $file1\n";
-foreach my $key (sort(@file1_unique)) {
-	print "$key=$file1_hash{$key}\n";
-}
+	print "[2] Gene Set unique for 1 file: $file1\n";
+	foreach my $key (sort(@file1_unique)) {
+		print "$key=$file1_hash{$key}\n";
+	}
 
-print "[3] Gene Set unique for 1 file: $file2\n";
-foreach my $key (sort(@file2_unique)) {
-	print "$key=$file2_hash{$key}\n";
-}
-
-if($has3Files) {
-	print "[4] Gene Set unique for 1 file: $file3\n";
-	foreach my $key (sort(@file3_unique)) {
-		print "$key=$file3_hash{$key}\n";
+	print "[3] Gene Set unique for 1 file: $file2\n";
+	foreach my $key (sort(@file2_unique)) {
+		print "$key=$file2_hash{$key}\n";
 	}
 }
 
@@ -120,18 +147,36 @@ sub diff {
 	#my %hash = map{$_ => 1} @$href1;
 	if(defined($href3)) {
 		#TODO this code is very close
-		my @list1 = keys($href1);
-		my @list2 = (keys($href2), keys($href3));
-		my @dif { @list2 } = ();
-		return grep( !exists($dif{$_}), @list1);
+		my @list1 = sort(keys(%$href1));
+		my @list2 = sort(keys(%$href2));
+		my @list3 = sort(keys(%$href3));
+		my @unique = ();
+		foreach my $i (@list1) {
+			my $isUnique = 1;
+			foreach my $k (@list2) {
+				if($i eq $k) {
+					$isUnique = 0;
+				}
+			}
+			foreach my $j (@list3) {
+				if($i eq $j) {
+					$isUnique = 0;
+				}
+			}
+			if($isUnique) {
+				print "unique gene = $i\n";
+				push(@unique, $i);
+			}
+		}
+		return @unique;
 	}
-	return grep(!defined %$href2->{$_}, keys($href1)); # href1 - href2
+	return grep(!defined %$href2->{$_}, keys(%$href1)); # href1 - href2
 }
 
 # Takes two, or three hashes as input and returns an array of their intersection
 sub intersect {
 	my ($href1, $href2, $href3) = @_;
-	my @intersect = grep( %$href1->{$_}, keys($href2));
+	my @intersect = grep( %$href1->{$_}, keys(%$href2));
 	if(defined($href3)) {
 		@intersect = grep( %$href3->{$_}, @intersect);
 	}
