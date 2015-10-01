@@ -115,17 +115,16 @@ if($has3Files) {
 ###########
 
 # Takes the difference between two hashes and returns it as an array
-# TODO change this to recieving arrays of keys and giving back one array
 sub diff {
 	my ($href1, $href2) = @_;
 	#my %hash = map{$_ => 1} @$href1;
-	return grep(!defined %$href2->{$_}, keys(%$href1)); # href1 - href2
+	return grep(!defined %$href2->{$_}, keys($href1)); # href1 - href2
 }
 
 # Takes two, or three hashes as input and returns an array of their intersection
 sub intersect {
 	my ($href1, $href2, $href3) = @_;
-	my @intersect = grep( %$href1->{$_}, keys(%$href2));
+	my @intersect = grep( %$href1->{$_}, keys($href2));
 	if(defined($href3)) {
 		@intersect = grep( %$href3->{$_}, @intersect);
 	}
