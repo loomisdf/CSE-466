@@ -2,7 +2,6 @@
 use strict;
 use Venn::Chart;
 
-my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
 
 # File names
 my $file1 = "";
@@ -138,6 +137,35 @@ if($has3Files) {
 	}
 }
 
+# CREATE AND PRINT VENN DIAGRAM
+###############################
+my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
+
+$venn_chart->set_options( -title => 'Venn diagram' );
+
+my @file1_keys = keys(%file1_hash);
+my @file2_keys = keys(%file2_hash);
+my @file3_keys = keys(%file3_hash);
+
+if($has3Files) {
+	$venn_chart->set_legends("File1", "File2", "File3");
+	my $gd_venn = $venn_chart->plot(\@file1_keys, \@file2_keys, \@file3_keys);
+
+	open(OUTPUT, '>venn.3.png') or die("Unable to create png file\n");
+	binmode (OUTPUT);
+	print OUTPUT $gd_venn->png;
+	close(OUTPUT);
+}
+else {
+	$venn_chart->set_legends("File1", "File2");
+	my $gd_venn = $venn_chart->plot(\@file1_keys, \@file2_keys);
+
+	open(OUTPUT, '>venn.2.png') or die("Unable to create png file\n");
+	binmode (OUTPUT);
+	print OUTPUT $gd_venn->png;
+	close(OUTPUT);
+}
+
 # FUNCTIONS
 ###########
 
@@ -146,7 +174,6 @@ sub diff {
 	my ($href1, $href2, $href3) = @_;
 	#my %hash = map{$_ => 1} @$href1;
 	if(defined($href3)) {
-		#TODO this code is very close
 		my @list1 = sort(keys(%$href1));
 		my @list2 = sort(keys(%$href2));
 		my @list3 = sort(keys(%$href3));
@@ -182,6 +209,7 @@ sub intersect {
 	return @intersect;
 }
 
+# Extract the @lines and put them into the hash
 sub extractContents {
 	my ($href, @lines) = @_;
 	#print "number of genes = $#lines\n";
