@@ -95,13 +95,13 @@ while(1) {
 	my $digits = length("".$lineNum);
 
 	# Figure out padding for line and necleotide position
-	my $linePad = "";
-	for(my $l = 0; $l < $digits; $l++) {
-		$linePad .= " ";	
-	}
+	my $linePad = " ";
+	#for(my $l = 0; $l < $digits; $l++) {
+	#	$linePad .= " ";	
+	#}
 
 	# Begin printing the sequence
-	print("     ".$linePad.
+	print("    ".$linePad.
 	      "         1".$space.
 		  "         2".$space.
 		  "         3".$space.
@@ -113,7 +113,7 @@ while(1) {
 		  "         9".$space.
 		  "        10\n");
 		  
-	print("Line".$linePad." ".
+	print("Line".$linePad.
 		  "1234567890".$space.
 		  "1234567890".$space.
 		  "1234567890".$space.
@@ -125,15 +125,20 @@ while(1) {
 		  "1234567890".$space.
 		  "1234567890\n");
 
-	my $indent = "    ";
+	my $indent = " ";
 	for(my $i = 1; $i <= $lineNum; $i++) {
 		# Figure out the padding based on the number of
 		# digits - the length of the number of digits of i
 		my $paddingLen = $digits - length("".$i);
 		my $padding = "";
-		for(my $l = 0; $l < $paddingLen; $l++) {
-			$padding .= " ";	
+		if($i < 10) {
+			$padding .= "  ";
+		} elsif ($i >= 10 && $i < 100) {
+			$padding .= " ";
 		}
+		#for(my $l = 0; $l < $paddingLen; $l++) {
+		#	$padding .= " ";
+		#}
 		print($indent.$padding."$i ");
 		
 		# $k starting point is 100 times the current line number - 1. 
