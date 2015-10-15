@@ -2,7 +2,6 @@
 use strict;
 use Venn::Chart;
 
-
 # File names
 my $file1 = "";
 my $file2 = "";
