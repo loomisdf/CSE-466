@@ -60,6 +60,7 @@ my @file1_unique = ();
 my @file2_unique = ();
 my @file3_unique = ();
 
+# Find the unique genes for each file
 if($has3Files) {
 	# TODO need to change these to diff(diff(A, B), C);
 	@file1_unique = diff(\%file1_hash, \%file2_hash, \%file3_hash);
@@ -74,6 +75,7 @@ if($has3Files) {
 #############
 my @intersect = ();
 
+# Print output for 3 files
 if($has3Files) {
 	@intersect = intersect(\%file1_hash, \%file2_hash, \%file3_hash);
 	print "[1] Common gene set for 3 files: $file1, $file2, and $file3\n";
@@ -117,6 +119,7 @@ if($has3Files) {
 	foreach my $key (sort(@file3_unique)) {
 		print "$key=$file3_hash{$key}\n";
 	}
+# Print output for 2 files
 } else {
 	@intersect = ();
 	@intersect = intersect(\%file1_hash, \%file2_hash);
@@ -136,8 +139,8 @@ if($has3Files) {
 	}
 }
 
-# CREATE AND PRINT VENN DIAGRAM
-###############################
+# CREATE VENN DIAGRAM
+#####################
 my $venn_chart = Venn::Chart->new(400, 400) or die("error:$!");
 
 $venn_chart->set_options( -title => 'Venn diagram' );
