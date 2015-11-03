@@ -8,9 +8,12 @@ use Bio::SeqIO;
 my %sequences; 				# sequence hash
 my $file = shift; 			# filename
 my $target_seq = shift; 	# sequence to match against
-my $match = shift;
-my $mismatch = shift;
-my $gap = shift;
+my $match = shift;			# match score
+my $mismatch = shift;		# mismatch score
+my $gap = shift;			# gap score
+my $min_map_length = shift; # minimum mapped length in the long sequence
+my $max_err_bases = shift;  # maximum error bases
+my $mode = shift;			# either all or one. print all the best scores, or just one of them
 # =============================
 
 
@@ -28,11 +31,25 @@ while (my $seq_objt=$stream->next_seq()) {
 }
 # ================================================
 
+
+# user input
+# ===================================
 print ">";
 my $seqname = <STDIN>;
 chomp($seqname);
 
 printWithSpacer($sequences{$seqname});
+# ===================================
+
+
+# print scoring info
+# ===================================
+print "[Scoring schema]: match=$match, mismatch=$mismatch, gap=$gap\n";
+print "[Search Target]: $target_seq\n";
+print "[Minimum mapped length]: $min_map_length\n";
+print "[The highest score]:\n";
+print "[The alignments with the highest score]:\n";
+# ===================================
 
 # Print out the sequence, nice and formatted
 sub printWithSpacer {
