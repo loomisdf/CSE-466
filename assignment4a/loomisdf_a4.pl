@@ -1,6 +1,7 @@
 #! usr/bin/perl -w
 use strict;
 use Align;
+use SeqAnalysis;
 use Bio::SeqIO;
 
 # Variables
@@ -37,6 +38,11 @@ while (my $seq_objt=$stream->next_seq()) {
 print ">";
 my $seqname = <STDIN>;
 chomp($seqname);
+
+# exit if sequence does not exist
+if(!exists($sequences{$seqname})) {
+	die "sequence does not exist\n";
+}
 # ===
 
 # create the Align object
@@ -53,3 +59,14 @@ my $AlignObject = Align->new(-seq1=>$target_seq,
 $AlignObject->printSeqWithSpacer();
 $AlignObject->getAlignment();
 # ===
+
+# create the seqAnalysis object
+# ===================================
+
+my $object2=SeqAnalysis->new(-seq_name=>$seqname, -sequence=>$sequences{$seqname}); 
+my ($a, $t, $g, $c, $n) = $object2->nucleotideCounter(); 
+print "a=$a t=$t g=$g c=$c other=$n\n\n";
+$object2->detectEnzyme(); 
+my $gc_content = $object2->GCContent(); 
+print "\nGCContent=$gc_content\n\n";
+$object2->polyA_signal();
