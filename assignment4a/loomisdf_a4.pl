@@ -28,6 +28,9 @@ while (my $seq_objt=$stream->next_seq()) {
     my $seq_desc=$seq_objt->desc();
     my $seq_base=$seq_objt->seq();
 	my $key = $seq_name." ".$seq_desc;
+	if($seq_desc eq "") {
+		$key = $seq_name;
+	}
 	$sequences{$key} = $seq_base;
 }
 # ===
@@ -62,11 +65,14 @@ $AlignObject->getAlignment();
 
 # create the seqAnalysis object
 # ===================================
-
-my $object2=SeqAnalysis->new(-seq_name=>$seqname, -sequence=>$sequences{$seqname}); 
-my ($a, $t, $g, $c, $n) = $object2->nucleotideCounter(); 
-print "a=$a t=$t g=$g c=$c other=$n\n\n";
-$object2->detectEnzyme(); 
-my $gc_content = $object2->GCContent(); 
-print "\nGCContent=$gc_content\n\n";
-$object2->polyA_signal();
+foreach my $key (keys(%sequences)) {
+	print "Analysis for Sequence=($key)\n";
+	my $object2=SeqAnalysis->new(-seq_name=>$key, -sequence=>$sequences{$key}); 
+	my ($a, $t, $g, $c, $n) = $object2->nucleotideCounter(); 
+	print "a=$a t=$t g=$g c=$c other=$n\n";
+	$object2->detectEnzyme();
+	my $gc_content = $object2->GCContent();
+	print "\nGCContent=$gc_content\n";
+	$object2->polyA_signal();
+	print "\n";
+}
