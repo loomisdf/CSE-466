@@ -22,7 +22,7 @@ sub getAlignment {
  	my $GAP = $self->{'-gap'};
 
 	my $min_map_length = $self->{'-min_map_len'};
-	my $cur_map_length = $min_map_length;
+	my $cur_map_length = length($seq1);
 	my $max_error = $self->{'-max_error'};
 	my $mode = $self->{'-mode'};
 
@@ -53,13 +53,14 @@ sub getAlignment {
 		  	my $max_j     = 0;
 		  	my $max_score = 0;
 	
-		  	for(my $i = 1; $i <= $seq1_len; $i++) {
+		  	for(my $i = 1; $i <= length($sub_seq2); $i++) {
 				for(my $j = 1; $j <= $seq1_len; $j++) {
 					my ($diagonal_score, $left_score, $up_score);
 				
 					# calculate match score
 					my $letter1 = substr($seq1, $j-1, 1);
 					my $letter2 = substr($sub_seq2, $i-1, 1);
+					
 					if ($letter1 eq $letter2) {
 				    	$diagonal_score = $matrix[$i-1][$j-1]{score} + $MATCH;
 					}
