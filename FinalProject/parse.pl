@@ -1,23 +1,12 @@
 #! usr/bin/perl -w
 use strict;
+use GFF_GTF_Parser;
 
 my $file_name = shift;
+my $file_type = shift;
+my $file_src = shift;
 
-open(INPUT, "<$file_name") or die "cannot open file $file_name";
-
-
-my $line;
-my @curr_line;
-
-while ($line = <INPUT>) {
-	chomp($line);
-	$line =~ s/\r$//;
-	if(substr($line, 0, 1) eq "#") {
-		next;
-	}
-	@curr_line = split($line, "\t");
-	foreach my $val (@curr_line) {
-		print "val=$val\n";
-	}
-	last;
-}
+my $obj = GFF_GTF_Parser->new( -file_name => $file_name,
+								-file_type => $file_type,
+								-file_src => $file_src);
+$obj->parseFile();
