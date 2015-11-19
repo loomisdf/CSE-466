@@ -1,0 +1,22 @@
+GL849905.1
+ensembl
+transcript
+826885
+827847
+.
+-
+.
+gene_id
+"ENSSHAG00000011277";
+gene_version "1";
+transcript_id
+"ENSSHAT00000013299";
+transcript_version "1";
+gene_source
+"ensembl";
+gene_biotype
+"protein_coding";
+transcript_source
+"ensembl";
+transcript_biotype
+"protein_coding";
