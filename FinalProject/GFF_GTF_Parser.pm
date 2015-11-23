@@ -23,35 +23,37 @@ sub parseFile {
 	open(FILE3, ">transcript.txt") or die "cannot create file ($file_name.txt)";
 
 	# Print header
-	print FILE2 "Gene_ID\tGene_Source\tGene_Name\tGene_Strand\tGene_Type\tStart\tStop\n";
+    print FILE2 "Gene_ID\tGene_Name\tGene_Source\tGene_Type\tChromosome\tStart\tEnd\tGene_Strand\t";
 	print FILE3 "Gene_ID\tTrans_ID\tGene_Source\tTrans_Source\tTrans_Strand\tGene_Type\tTrans_Type\tStart\tStop\n";
 
 	my @curr_line;
 
 	if(lc($file_type) eq 'gtf') {
 		while (my $line = <FILE1>) {
-			print "something\n";
 			chomp($line);
 			$line =~ s/\r$//;
 			if(substr($line, 0, 1) eq "#") {
 				next;
 			}
 
-			@curr_line = split(/[\s+]/, $line);
+            @curr_line = split(/[\s+]/, $line);
+            for(my $i = 0; $i < $#curr_line + 1; $i++) {
+                print $curr_line[$i]."\n";
+            }
 
 			if($curr_line[2] eq 'gene') {
-				my $gene_id = $curr_line[9];
-				my $gene_src = $curr_line[13];
-				my $gene_name = 'NULL';
-				my $gene_strand = $curr_line[6];
-				my $gene_type = $curr_line[15];
-				my $start = $curr_line[3];
-				my $stop = $curr_line[4];
-			
-				print FILE2 "$gene_id\t$gene_src\t$gene_name\t$gene_strand\t$gene_type\t$start\t$stop";
+                my $chromosome = $curr_line[0];
+                my $gene_id = $curr_line[9];
+                my $gene_src = $curr_line[15];
+                my $gene_name = $curr_line[13];
+                my $gene_strand = $curr_line[6];
+                my $gene_type = $curr_line[17];
+                my $start = $curr_line[3];
+                my $stop = $curr_line[4];
+                print FILE2 "$gene_id\t$gene_name\t$gene_source\t$gene_type\t$chromosome\t$start\t$end\tGene_Strand\t"; 
 			}
 			elsif($curr_line[2] eq 'transcript') {
-				my $gene_id = 
+                my $gene_id = 'NULL';
 			}
 			last;
 		}
